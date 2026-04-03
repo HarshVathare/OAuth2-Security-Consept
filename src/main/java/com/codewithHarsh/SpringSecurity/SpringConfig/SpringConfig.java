@@ -54,10 +54,7 @@ public class SpringConfig {
 
                         // Any other request
                         .anyRequest().authenticated()
-                )
-
-                // Enable authentication provider
-                .authenticationProvider(authenticationProvider(customUserDetailsService));
+                );
 
         // JWT filter (enable later)
          http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -81,17 +78,17 @@ public class SpringConfig {
 //        return http.build();
 //    }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(
-            CustomUserDetailsService userDetailsService) {
-
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider(userDetailsService); // ✅ REQUIRED
-
-        provider.setPasswordEncoder(passwordEncoder());
-
-        return provider;
-    }
+//    @Bean
+//    public AuthenticationProvider authenticationProvider(
+//            CustomUserDetailsService userDetailsService) {
+//
+//        DaoAuthenticationProvider provider =
+//                new DaoAuthenticationProvider(userDetailsService); // ✅ REQUIRED
+//
+//        provider.setPasswordEncoder(passwordEncoder());
+//
+//        return provider;
+//    }
 
   //  @Bean
 //    public UserDetailsService userDetailsService() {
