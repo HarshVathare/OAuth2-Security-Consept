@@ -54,7 +54,9 @@ public class SpringConfig {
 
                         // Any other request
                         .anyRequest().authenticated()
+
                 );
+//                        .formLogin(Customizer.withDefaults());
 
         // JWT filter (enable later)
          http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

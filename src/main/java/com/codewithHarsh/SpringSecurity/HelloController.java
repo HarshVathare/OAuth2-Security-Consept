@@ -47,30 +47,6 @@ public class HelloController {
         return "hello user ..!";
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody LoginRequest loginRequest) {
-//        Authentication authentication;
-//        try {
-//            authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            loginRequest.getUsername(),
-//                            loginRequest.getPassword()
-//                    )
-//            );
-//
-//
-//        }catch (AuthenticationException e) {
-//            e.getMessage();
-//            return "could not authenticate";
-//        }
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication); //store in context
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal(); //get all data from authentication
-//
-//        String JwtToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
-//        return JwtToken;
-//    }
-
     @PostMapping("/register")
     public ResponseEntity<UserResponse> registerData(@RequestBody RegesterRequest regesterRequest) {
         return ResponseEntity.ok(authService.registerData(regesterRequest));
