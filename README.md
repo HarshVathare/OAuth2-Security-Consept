@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Spring-Security-Consept# 🔐 Spring Security with JWT Authentication
 📌 Overview
 This project demonstrates how to implement Spring Security with JWT (JSON Web Token) for authentication and authorization in a Spring Boot application.
@@ -36,3 +37,7 @@ Client sends token in header:
 Authorization: Bearer <token>
 Filter validates token for each request
 
+=======
+# OAuth2-Security-Consept
+OAuth2-Security-Consept
+>>>>>>> f577f72b4e4c8d868d69e22dfc176c5b96feeecc
