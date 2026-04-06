@@ -55,7 +55,9 @@ public class SpringConfig {
                         // Any other request
                         .anyRequest().authenticated()
 
-                );
+                )
+                .oauth2Login(oauth2-> oauth2.defaultSuccessUrl("/hello",true))
+        ;
 //                        .formLogin(Customizer.withDefaults());
 
         // JWT filter (enable later)
