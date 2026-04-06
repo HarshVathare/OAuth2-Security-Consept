@@ -66,67 +66,6 @@ public class SpringConfig {
         return http.build();
     }
 
-//    @Autowired
-//    AuthTokenFilter authTokenFilter;
-
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) {
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(httprequest->
-//                httprequest.requestMatchers("/admin/**").hasRole("ADMIN")
-//                                .requestMatchers("/user/**").hasRole("USER")
-//
-//                .anyRequest().permitAll()
-//        );
-////        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
-
-//    @Bean
-//    public AuthenticationProvider authenticationProvider(
-//            CustomUserDetailsService userDetailsService) {
-//
-//        DaoAuthenticationProvider provider =
-//                new DaoAuthenticationProvider(userDetailsService); // ✅ REQUIRED
-//
-//        provider.setPasswordEncoder(passwordEncoder());
-//
-//        return provider;
-//    }
-
-  //  @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user1 = User.withUsername("abc")
-//                .password(passwordEncoder().encode("abc"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails user2 = User.withUsername("xyz")
-//                .password(passwordEncoder().encode("xyz"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.withUsername("admin2")
-//                .password(passwordEncoder().encode("admin2"))
-//                .roles("ADMIN")
-//                .build();
-//
-////        return new InMemoryUserDetailsManager(user1, user2); // data store in memory not DB
-//        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-//        if(!userDetailsManager.userExists(user1.getUsername())){
-//            userDetailsManager.createUser(user1);
-//        }
-//
-//        if(!userDetailsManager.userExists(user2.getUsername())){
-//            userDetailsManager.createUser(user2);
-//        }
-//
-//        if(!userDetailsManager.userExists(admin.getUsername())){
-//            userDetailsManager.createUser(admin);
-//        }
-//
-//        return userDetailsManager;
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
