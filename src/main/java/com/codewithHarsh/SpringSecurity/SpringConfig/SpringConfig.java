@@ -2,6 +2,7 @@ package com.codewithHarsh.SpringSecurity.SpringConfig;
 
 //Centralized config file
 
+import com.codewithHarsh.SpringSecurity.OAuth2.OAuth2SuccessHandler;
 import com.codewithHarsh.SpringSecurity.Service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +39,9 @@ public class SpringConfig {
     @Autowired
     CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    OAuth2SuccessHandler oAuth2SuccessHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -56,7 +60,11 @@ public class SpringConfig {
                         .anyRequest().authenticated()
 
                 )
-                .oauth2Login(oauth2-> oauth2.defaultSuccessUrl("/hello",true))
+//                .oauth2Login(oauth2-> oauth2.defaultSuccessUrl("/hello",true))
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2SuccessHandler)
+                )
+
         ;
 //                        .formLogin(Customizer.withDefaults());
 

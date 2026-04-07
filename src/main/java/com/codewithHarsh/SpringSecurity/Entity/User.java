@@ -6,8 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,7 +21,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "user")
 @Builder
-public class User {
+public class User implements UserDetailsService {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -27,10 +33,10 @@ public class User {
 
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = true)
     private String email;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true,nullable = true)
     private String password;
 
     @CreationTimestamp
@@ -38,4 +44,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 }
