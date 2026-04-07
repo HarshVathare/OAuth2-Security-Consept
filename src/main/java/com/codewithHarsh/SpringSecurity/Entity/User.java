@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "user")
 @Builder
-public class User implements UserDetailsService {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -51,7 +51,7 @@ public class User implements UserDetailsService {
     private AuthProviderType providerType;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 }

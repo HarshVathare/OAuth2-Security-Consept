@@ -3,25 +3,17 @@ package com.codewithHarsh.SpringSecurity.SpringConfig;
 //Centralized config file
 
 import com.codewithHarsh.SpringSecurity.OAuth2.OAuth2SuccessHandler;
-import com.codewithHarsh.SpringSecurity.Service.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -40,16 +32,16 @@ public class SpringConfig {
     AuthTokenFilter authTokenFilter;
 
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    CustomUserDetails customUserDetails;
 
-    @Autowired
-    OAuth2SuccessHandler oAuth2SuccessHandler;
+//    @Autowired
+//    OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Autowired
     HandlerExceptionResolver handlerExceptionResolver;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, OAuth2SuccessHandler oAuth2SuccessHandler) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -83,6 +75,10 @@ http.oauth2Login(oAuth2 -> oAuth2
                 })
                 .successHandler(oAuth2SuccessHandler)
         );
+//        http
+//                .oauth2Login(oauth -> oauth
+//                        .successHandler(oAuth2SuccessHandler)
+//                );
         return http.build();
     }
 
@@ -96,4 +92,10 @@ http.oauth2Login(oAuth2 -> oAuth2
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) {
         return builder.getAuthenticationManager();
     }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }
+

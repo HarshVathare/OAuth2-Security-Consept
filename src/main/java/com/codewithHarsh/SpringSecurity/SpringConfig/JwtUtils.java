@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,15 +22,13 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    private final AuthProviderType authProviderType;
+
 
     private String jwtSecret = "ghjyfghtdsfrhghjuiojklghjukjdftuyjkijklofghuksdfxcvjkliuykh";
 
     private int JwtExpiration = 172800000; // for 48 hr
 
-    public JwtUtils(AuthProviderType authProviderType) {
-        this.authProviderType = authProviderType;
-    }
+
 
     public String getJwtFromHeaders(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -88,6 +87,7 @@ public class JwtUtils {
             case "google" -> AuthProviderType.GOOGLE;
             case "github" -> AuthProviderType.GITHUB;
             case "facebook" -> AuthProviderType.FACEBOOK;
+            case "twitter" -> AuthProviderType.TWITTER;
             default -> throw new IllegalArgumentException("Unsupported OAuth2 provider: " + registrationId);
         };
     }

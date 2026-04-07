@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,7 @@ public class RegesterRequest {
     private String email;
 
     private String password;
+
+    public <E> RegesterRequest(String username, Object o, String name, Set<E> user) {
+    }
 }
