@@ -45,6 +45,11 @@ public class User implements UserDetailsService {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
+    private String providerId;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProviderType providerType;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;

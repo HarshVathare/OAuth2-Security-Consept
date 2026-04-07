@@ -4,6 +4,7 @@ package com.codewithHarsh.SpringSecurity.SpringConfig;
 
 import com.codewithHarsh.SpringSecurity.OAuth2.OAuth2SuccessHandler;
 import com.codewithHarsh.SpringSecurity.Service.CustomUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +24,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.sql.DataSource;
 
 @Configuration
+@Slf4j
 @EnableWebSecurity
 public class SpringConfig {
 
@@ -41,6 +44,9 @@ public class SpringConfig {
 
     @Autowired
     OAuth2SuccessHandler oAuth2SuccessHandler;
+
+    @Autowired
+    HandlerExceptionResolver handlerExceptionResolver;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -61,16 +67,22 @@ public class SpringConfig {
 
                 )
 //                .oauth2Login(oauth2-> oauth2.defaultSuccessUrl("/hello",true))
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(oAuth2SuccessHandler)
-                )
+//                .oauth2Login(oauth2 -> oauth2
+//                        .successHandler(oAuth2SuccessHandler)
+//                )
 
         ;
 //                        .formLogin(Customizer.withDefaults());
 
         // JWT filter (enable later)
          http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+http.oauth2Login(oAuth2 -> oAuth2
+                .failureHandler((request, response, exception) -> {
+                    log.error("OAuth2 error: {}", exception.getMessage());
+                    handlerExceptionResolver.resolveException(request, response, null, exception);
+                })
+                .successHandler(oAuth2SuccessHandler)
+        );
         return http.build();
     }
 
