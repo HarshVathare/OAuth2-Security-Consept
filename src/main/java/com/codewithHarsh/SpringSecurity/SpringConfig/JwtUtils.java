@@ -88,6 +88,7 @@ public class JwtUtils {
             case "github" -> AuthProviderType.GITHUB;
             case "facebook" -> AuthProviderType.FACEBOOK;
             case "twitter" -> AuthProviderType.TWITTER;
+            case "microsoft" -> AuthProviderType.MICROSOFT;    
             default -> throw new IllegalArgumentException("Unsupported OAuth2 provider: " + registrationId);
         };
     }
