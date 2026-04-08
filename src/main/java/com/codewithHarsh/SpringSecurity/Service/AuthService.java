@@ -41,6 +41,10 @@ public class AuthService {
             throw new IllegalArgumentException("User already exists");
         }
 
+        if (providerType == AuthProviderType.EMAIL && request.getPassword() == null) {
+            throw new IllegalArgumentException("Password is required for email registration");
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -99,8 +103,13 @@ public class AuthService {
         String providerId =
                 jwtUtils.determineProviderIdFromOAuth2User(oAuth2User, registrationId);
 
-        String email = oAuth2User.getAttribute("email");
+        String email = jwtUtils.extractEmail(oAuth2User, registrationId);
         String name = oAuth2User.getAttribute("name");
+
+        // ⚠️ GitHub case (email can be null)
+        if (email == null || email.isBlank()) {
+            email = providerId + "@oauth.com"; // fallback
+        }
 
         User user = (User) userRepository
                 .findByProviderIdAndProviderType(providerId, providerType)
@@ -108,23 +117,35 @@ public class AuthService {
 
         User emailUser = userRepository.findByEmail(email).orElse(null);
 
+        // ✅ CASE 1: New User
         if (user == null && emailUser == null) {
 
-            user = signUpInternal(
-                    new RegesterRequest(email, null, name, null),
-                    providerType,
-                    providerId
-            );
+            user = User.builder()
+                    .username(email)
+                    .email(email)
+                    .firstName(name)
+                    .password(null)
+                    .providerType(providerType)
+                    .providerId(providerId)
+                    .role(UserRole.USER)
+                    .build();
 
-        } else if (user == null) {
+            user = userRepository.save(user);
+        }
+
+        // ❌ CASE 2: Email exists but different provider
+        else if (user == null) {
             throw new BadCredentialsException(
-                    "Already registered with " + emailUser.getProviderType()
+                    "Account already exists with " + emailUser.getProviderType()
             );
         }
 
-        // ✅ Create UserDetails
+        // ✅ CASE 3: Existing OAuth user → login
+        // nothing needed
+
+        // 🔥 Generate JWT
         UserDetails userDetails = org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
+                .withUsername(user.getEmail())
                 .password("")
                 .authorities(user.getAuthorities())
                 .build();

@@ -21,7 +21,4 @@ public class RegesterRequest {
     private String email;
 
     private String password;
-
-    public <E> RegesterRequest(String username, Object o, String name, Set<E> user) {
-    }
 }

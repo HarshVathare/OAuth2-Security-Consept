@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true,nullable = true)
     private String username;
 
     private String firstName;
@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = true)
     private String email;
 
-    @Column(unique = true,nullable = true)
+    @Column(nullable = true)
     private String password;
 
     @CreationTimestamp
@@ -52,6 +52,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(() -> "ROLE_" + role.name());
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // 🔥 ALWAYS USE EMAIL AS USERNAME
     }
 }

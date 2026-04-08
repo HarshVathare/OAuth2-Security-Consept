@@ -4,6 +4,7 @@ package com.codewithHarsh.SpringSecurity.SpringConfig;
 
 import com.codewithHarsh.SpringSecurity.OAuth2.OAuth2SuccessHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -68,17 +69,13 @@ public class SpringConfig {
 
         // JWT filter (enable later)
          http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-http.oauth2Login(oAuth2 -> oAuth2
-                .failureHandler((request, response, exception) -> {
-                    log.error("OAuth2 error: {}", exception.getMessage());
-                    handlerExceptionResolver.resolveException(request, response, null, exception);
-                })
+        http.oauth2Login(oAuth2 -> oAuth2
                 .successHandler(oAuth2SuccessHandler)
+                .failureHandler((req, res, ex) -> {
+                    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+                })
         );
-//        http
-//                .oauth2Login(oauth -> oauth
-//                        .successHandler(oAuth2SuccessHandler)
-//                );
+
         return http.build();
     }
 

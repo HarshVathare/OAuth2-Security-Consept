@@ -17,34 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-//@Component
-//@RequiredArgsConstructor
-//public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
-//
-//    private final AuthService authService;
-//    private final ObjectMapper objectMapper;
-//
-//    @Override
-//    public void onAuthenticationSuccess(HttpServletRequest request,
-//                                        HttpServletResponse response,
-//                                        Authentication authentication)
-//            throws IOException {
-//
-//        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
-//        OAuth2User oAuth2User = token.getPrincipal();
-//
-//        String registrationId = token.getAuthorizedClientRegistrationId();
-//
-//        ResponseEntity<LoginResponse> loginResponse =
-//                authService.handleOAuth2LoginRequest(oAuth2User, registrationId);
-//
-//        response.setContentType("application/json");
-//        response.setStatus(HttpServletResponse.SC_OK);
-//
-//        objectMapper.writeValue(response.getWriter(), loginResponse.getBody());
-//    }
-//}
-
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
@@ -56,27 +28,53 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication)
-            throws IOException, ServletException {
+            throws IOException {
 
-        // ✅ Ensure correct authentication type
-        if (!(authentication instanceof OAuth2AuthenticationToken token)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid OAuth2 Authentication");
-            return;
-        }
+        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
 
-        // ✅ Extract OAuth2 user safely
         OAuth2User oAuth2User = token.getPrincipal();
         String registrationId = token.getAuthorizedClientRegistrationId();
 
-        // ✅ Call service
         ResponseEntity<LoginResponse> loginResponse =
                 authService.handleOAuth2LoginRequest(oAuth2User, registrationId);
 
-        // ✅ Prepare response
-        response.setStatus(loginResponse.getStatusCode().value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
 
-        // ✅ Write JSON response
         objectMapper.writeValue(response.getWriter(), loginResponse.getBody());
     }
 }
+
+
+
+
+
+
+
+//    @Override
+//    public void onAuthenticationSuccess(HttpServletRequest request,
+//                                        HttpServletResponse response,
+//                                        Authentication authentication)
+//            throws IOException, ServletException {
+//
+//        // ✅ Ensure correct authentication type
+//        if (!(authentication instanceof OAuth2AuthenticationToken token)) {
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid OAuth2 Authentication");
+//            return;
+//        }
+//
+//        // ✅ Extract OAuth2 user safely
+//        OAuth2User oAuth2User = token.getPrincipal();
+//        String registrationId = token.getAuthorizedClientRegistrationId();
+//
+//        // ✅ Call service
+//        ResponseEntity<LoginResponse> loginResponse =
+//                authService.handleOAuth2LoginRequest(oAuth2User, registrationId);
+//
+//        // ✅ Prepare response
+//        response.setStatus(loginResponse.getStatusCode().value());
+//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//
+//        // ✅ Write JSON response
+//        objectMapper.writeValue(response.getWriter(), loginResponse.getBody());
+//    }

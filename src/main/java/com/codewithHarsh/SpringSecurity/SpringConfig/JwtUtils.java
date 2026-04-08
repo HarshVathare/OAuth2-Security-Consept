@@ -123,5 +123,11 @@ public class JwtUtils {
         };
     }
 
-
+    public String extractEmail(OAuth2User oAuth2User, String registrationId) {
+        return switch (registrationId.toLowerCase()) {
+            case "google" -> oAuth2User.getAttribute("email");
+            case "github" -> oAuth2User.getAttribute("email"); // may be null
+            default -> null;
+        };
+    }
 }
