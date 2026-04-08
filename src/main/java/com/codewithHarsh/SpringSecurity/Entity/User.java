@@ -26,17 +26,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(unique = true,nullable = true)
+    @Column(unique = true)
     private String username;
 
     private String firstName;
 
     private String lastName;
 
-    @Column(unique = true, nullable = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = true)
+
     private String password;
 
     @CreationTimestamp

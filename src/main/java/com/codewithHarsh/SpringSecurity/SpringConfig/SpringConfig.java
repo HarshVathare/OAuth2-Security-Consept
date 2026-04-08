@@ -58,14 +58,7 @@ public class SpringConfig {
                         // Any other request
                         .anyRequest().authenticated()
 
-                )
-//                .oauth2Login(oauth2-> oauth2.defaultSuccessUrl("/hello",true))
-//                .oauth2Login(oauth2 -> oauth2
-//                        .successHandler(oAuth2SuccessHandler)
-//                )
-
-        ;
-//                        .formLogin(Customizer.withDefaults());
+                );
 
         // JWT filter (enable later)
          http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
